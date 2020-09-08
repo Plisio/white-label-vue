@@ -1,4 +1,4 @@
-#### PHP example
+#### PHP + Vue example
 
 This is a simple example of making crypto payments with Plisio.
 
