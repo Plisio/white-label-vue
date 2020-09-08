@@ -7,7 +7,7 @@ module.exports = {
     : '',
   outputDir: '../pages/',
   indexPath: './invoice.php',
-  assetsDir: '../assets',
+  assetsDir: isDev ? 'assets' : '../assets',
   productionSourceMap: false,
   css: {
     loaderOptions: {
