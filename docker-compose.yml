@@ -12,8 +12,5 @@ services:
       - "8000:80"
     depends_on:
       - mysql
-    extra_hosts:
-      - "plisio.loc:192.168.88.114"
-      - "xdebug.loc:192.168.88.114"
     volumes:
       - ./:/app

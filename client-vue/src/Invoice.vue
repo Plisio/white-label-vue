@@ -169,7 +169,7 @@ export default {
       }
     },
     fetchData () {
-      return api.get('/check-invoice',
+      return api.get('/check-invoice.php',
         {
           params: {
             page: 'invoice',

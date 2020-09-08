@@ -16,7 +16,7 @@ if (isset($_GET['install'])) {
     $res = $orderObject->install();
     echo $res ? 'DB tables created successfully.' : 'Could not create tables.';
     die();
-}   else if (isset($_GET['page'])) {
+} else if (isset($_GET['page'])) {
     // handle invoice updates (Plisio's callback)
     if ($_GET['page'] === 'callback' && isset($_POST) && !empty($_POST)) {
         if ($client->verifyCallbackData($_POST, $plisioSecretKey)) {
@@ -32,7 +32,7 @@ if (isset($_GET['install'])) {
         } else {
             header('HTTP/1.1 400 Bad Request');
         }
-    // display white-label invoice page and handle ajax updates
+        // display white-label invoice page and handle ajax updates
     } elseif ($_GET['page'] === 'invoice' && isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])) {
         $order = $orderObject->get($_GET['invoice_id']);
         $order['expire_utc'] = (new DateTime($order['expire_utc']))->getTimestamp() * 1000;
@@ -60,16 +60,7 @@ if (isset($_GET['install'])) {
 
     //validate user input
     $errors = [];
-    foreach ($validators as $field => $validator) {
-        if (isset($_POST[$field])) {
-            if (!filter_var($field, $validator)) {
-                $errors[$field] = 'Invalid ' . $field . ' value';
-            }
-        }
-    }
-    if (empty($errors)) {
-
-        //prepare invoice data
+    if (isset($_POST) && !empty($_POST)) {
         $data = array(
             'order_number' => (int)$_POST['order_number'],
             'order_name' => $_POST['order_name'],
@@ -78,7 +69,6 @@ if (isset($_GET['install'])) {
             'callback_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/?page=callback',
 //        'email' => $_POST['email']
         );
-
         if (isset($_POST['amount_usd']) && $_POST['amount_usd'] == true) {
             $data['source_amount'] = (float)$_POST['amount_usd'];
             $data['source_currency'] = 'USD';
@@ -86,27 +76,37 @@ if (isset($_GET['install'])) {
             $data['amount'] = number_format($_POST['amount'], 8, '.', '');
         }
 
-        $response = $client->createTransaction($data);
+        foreach ($validators as $field => $validator) {
+            if (isset($data[$field])) {
+                if (!filter_var($data[$field], $validator)) {
+                    $errors[$field] = 'Invalid ' . $field . ' value';
+                }
+            }
+        }
 
-        if ($response && $response['status'] !== 'error' && !empty($response['data'])) {
-            $whiteLabel = isset($response['data']['wallet_hash']);
-            if ($orderObject->add(array_merge($response['data'], [
-                'order_id' => $_POST['order_number'],
-                'plisio_invoice_id' => $response['data']['txn_id']
-            ]), $whiteLabel)) {
-                if ($whiteLabel){
-                    header('Location: ?page=invoice&invoice_id=' . $response['data']['txn_id']);
+        if (empty($errors)) {
+
+            $response = $client->createTransaction($data);
+
+            if ($response && $response['status'] !== 'error' && !empty($response['data'])) {
+                $whiteLabel = isset($response['data']['wallet_hash']);
+                if ($orderObject->add(array_merge($response['data'], [
+                    'order_id' => $_POST['order_number'],
+                    'plisio_invoice_id' => $response['data']['txn_id']
+                ]), $whiteLabel)) {
+                    if ($whiteLabel) {
+                        header('Location: ?page=invoice&invoice_id=' . $response['data']['txn_id']);
+                    } else {
+                        header('Location: ' . $response['data']['invoice_url']);
+                    }
                 } else {
-                    header('Location: ' . $response['data']['invoice_url']);
+                    die('');
                 }
             } else {
-                die('');
+                $errors = json_decode($response['data']['message'], true);
             }
-        } else {
-            $errors = json_decode($response['data']['message'], true);
         }
     }
-
     $currencies = $client->getCurrencies();
     if (isset($currencies['status']) && $currencies['status'] === 'success' && isset($currencies['data'])) {
         $currencies = $currencies['data'];
