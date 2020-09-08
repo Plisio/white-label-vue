@@ -35,6 +35,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="email">Customer email:</label>
+                    <input type="email" name="email" class="form-control" id="email" required value="<?=(isset($_POST['email']) ? $_POST['email'] : '');?>" placeholder="Email"/>
+                </div>
+
+                <div class="form-group">
                     <label for="order_number">Order number:</label>
                     <input type="number" name="order_number" class="form-control" id="order_number" required value="<?=(isset($_POST['order_number']) ? $_POST['order_number'] : 0);?>"/>
                 </div>
