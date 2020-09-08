@@ -56,6 +56,7 @@ if (isset($_GET['install'])) {
         'amount' => FILTER_VALIDATE_FLOAT,
         'order_number' => FILTER_VALIDATE_INT,
         'amount_usd' => FILTER_VALIDATE_FLOAT,
+        'email' => FILTER_VALIDATE_EMAIL,
     ];
 
     //validate user input
@@ -67,7 +68,7 @@ if (isset($_GET['install'])) {
             'description' => $_POST['description'],
             'currency' => $_POST['currency'],
             'callback_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/?page=callback',
-//        'email' => $_POST['email']
+            'email' => $_POST['email']
         );
         if (isset($_POST['amount_usd']) && $_POST['amount_usd'] == true) {
             $data['source_amount'] = (float)$_POST['amount_usd'];
