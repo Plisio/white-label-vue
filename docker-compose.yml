@@ -1,0 +1,19 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.6
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+  invoice_vue:
+    image: webdevops/php-nginx-dev:7.3
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "plisio.loc:192.168.88.114"
+      - "xdebug.loc:192.168.88.114"
+    volumes:
+      - ./:/app
