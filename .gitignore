@@ -1,0 +1,8 @@
+vendor
+
+assets/css/*
+!assets/css/demo.scss
+!assets/css/demo.css
+
+assets/js/*
+!assets/js/create-invoice.js
