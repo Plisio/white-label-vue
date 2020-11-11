@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import Invoice from './Invoice.vue'
-import './plugins'
+import App from './App.vue'
 
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(Invoice)
+  render: h => h(App)
 }).$mount('#app')

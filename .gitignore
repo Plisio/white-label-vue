@@ -8,3 +8,5 @@ assets/js/*
 !assets/js/create-invoice.js
 
 pages/invoice.php
+
+settings.php

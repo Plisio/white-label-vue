@@ -1,12 +1,8 @@
-# vue-white-label
+# vue-client
 
 ## Project setup
 ```
 yarn install
-```
-### Checkout .env to set your custom environment
-```
-cat .env
 ```
 
 ### Compiles and hot-reloads for development
@@ -17,6 +13,11 @@ yarn serve
 ### Compiles and minifies for production
 ```
 yarn build
+```
+
+### Lints and fixes files
+```
+yarn lint
 ```
 
 ### Customize configuration
