@@ -57,3 +57,8 @@ npm run serve
 This is simple example that should help you to create your custom solutions!
 
 Please do not forget to validate user input and securely save data into the database.
+
+### Related repositories:
+[@plisio/vue-invoice](https://github.com/Plisio/vue-invoice)
+
+[plisio-api-php](https://github.com/Plisio/plisio-api-php)
