@@ -5,39 +5,16 @@ module.exports = {
   publicPath: isDev
     ? '/'
     : '',
-  outputDir: '../pages/',
+  outputDir: path.join(__dirname, '../pages/'),
   indexPath: './invoice.php',
   assetsDir: isDev ? 'assets' : '../assets',
   productionSourceMap: false,
-  css: {
-    loaderOptions: {
-      sass: {
-        prependData: `
-          @import "@/assets/styles/_variables.scss";
-        `
-      }
-    }
-  },
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.join(__dirname, './src'),
-        '@assets': path.join(__dirname, './src/assets')
-      }
-    },
-    optimization: {
-      splitChunks: {
-        minSize: 10000,
-        maxSize: 200000
+        '@': path.join(__dirname, './src')
       }
     }
-  },
-  chainWebpack: config => {
-    const svgRule = config.module.rule('svg')
-    svgRule.uses.clear()
-    svgRule
-      .use('vue-svg-loader')
-      .loader('vue-svg-loader')
   },
   devServer: {
     // contentBase: path.join(__dirname, './dist'),

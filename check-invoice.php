@@ -22,17 +22,19 @@ $client = new \Plisio\ClientAPI($plisioSecretKey);
 if ($_GET['page'] === 'invoice' && isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])) {
     $order = $orderObject->get($_GET['invoice_id']);
 
-    $order['expire_utc'] = (new DateTime($order['expire_utc']))->getTimestamp() * 1000;
-    if (!empty($order['tx_urls'])) {
-        try {
-            $txUrl = json_decode($order['tx_urls']);
-            if (!empty($txUrl)) {
-                $txUrl = gettype($txUrl) === 'string' ? $txUrl : $txUrl[count($txUrl) - 1];
-                $order['txUrl'] = $txUrl;
+    if (!empty($order)) {
+        $order['expire_utc'] = (new DateTime($order['expire_utc']))->getTimestamp() * 1000;
+        if (!empty($order['tx_urls'])) {
+            try {
+                $txUrl = json_decode($order['tx_urls']);
+                if (!empty($txUrl)) {
+                    $txUrl = gettype($txUrl) === 'string' ? $txUrl : $txUrl[count($txUrl) - 1];
+                    $order['txUrl'] = $txUrl;
+                }
+            } catch (Exception $e) {
+                //TODO: log error $e
+                return;
             }
-        } catch (Exception $e) {
-            //TODO: log error $e
-            return;
         }
     }
 
